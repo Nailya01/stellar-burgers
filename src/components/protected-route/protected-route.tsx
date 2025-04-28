@@ -12,7 +12,7 @@ type ProtectedRouteProps = {
 };
 
 export const ProtectedRoute = ({
-  onlyUnAuth,
+  onlyUnAuth = false,
   children
 }: ProtectedRouteProps) => {
   const isAuthChecked = useSelector(isAuthCheckedSelector);
@@ -28,8 +28,13 @@ export const ProtectedRoute = ({
   }
 
   if (onlyUnAuth && isAuthChecked) {
-    const from = location.state?.from || { pathname: '/' };
-    return <Navigate replace to={from} state={location} />;
+    return (
+      <Navigate
+        replace
+        to={location.state?.from || '/'}
+        state={{ from: location }}
+      />
+    );
   }
 
   return children;

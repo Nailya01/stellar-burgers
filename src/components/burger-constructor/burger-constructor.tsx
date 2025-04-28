@@ -25,9 +25,10 @@ export const BurgerConstructor: FC = () => {
 
   const isAuthenticated = useSelector(isAuthCheckedSelector);
 
-  const onOrderClick = () => {
+  const onOrderClick = async () => {
     if (!isAuthenticated) {
       navigate('/login');
+      return;
     }
 
     const { bun, ingredients } = constructorItems;
@@ -37,12 +38,15 @@ export const BurgerConstructor: FC = () => {
       ...ingredients.map((ingredient) => ingredient._id),
       bun?._id!
     ];
-    dispatch(orderBurgerThunk(orderData));
+    try {
+      await dispatch(orderBurgerThunk(orderData)).unwrap();
+      dispatch(clearBurgerConstructor());
+    } catch (error) {}
   };
+
   const closeOrderModal = () => {
     navigate('/', { replace: true });
     dispatch(clearOrder());
-    dispatch(clearBurgerConstructor());
   };
 
   const price = useMemo(

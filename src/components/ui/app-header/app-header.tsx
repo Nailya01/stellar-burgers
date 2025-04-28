@@ -1,80 +1,57 @@
-import React, { FC } from 'react';
+import { FC } from 'react';
 import styles from './app-header.module.css';
 import { TAppHeaderUIProps } from './type';
+
 import {
   BurgerIcon,
   ListIcon,
   Logo,
   ProfileIcon
 } from '@zlden/react-developer-burger-ui-components';
-import { Link, useLocation } from 'react-router-dom';
+
+import { NavLink } from 'react-router-dom';
 import clsx from 'clsx';
 
-export const AppHeaderUI: FC<TAppHeaderUIProps> = ({ userName }) => {
-  const location = useLocation();
-  const currentLocation = location.pathname;
-
-  return (
-    <header className={styles.header}>
-      <nav className={`${styles.menu} p-4`}>
-        <div className={styles.menu_part_left}>
-          <>
-            <Link
-              className={clsx(
-                styles.link,
-                currentLocation === '/'
-                  ? [styles.link_active, styles.link]
-                  : styles.link
-              )}
-              to={'/'}
-            >
-              <BurgerIcon
-                type={currentLocation === '/' ? 'primary' : 'secondary'}
-              />
-              <p className='text text_type_main-default ml-2 mr-10'>
+export const AppHeaderUI: FC<TAppHeaderUIProps> = ({ userName }) => (
+  <header className={styles.header}>
+    <nav className={`${styles.menu} p-4`}>
+      <div className={styles.menu_part_left}>
+        <NavLink to='/' className={clsx(styles.navlink, 'mr-4', 'p-4')}>
+          {({ isActive }) => (
+            <div className={clsx(styles.link, isActive && styles.link_active)}>
+              <BurgerIcon type={isActive ? 'primary' : 'secondary'} />
+              <span className='text text_type_main-default ml-2'>
                 Конструктор
-              </p>
-            </Link>
-          </>
-          <>
-            <Link
-              className={clsx(
-                styles.link,
-                currentLocation === '/feed'
-                  ? [styles.link_active, styles.link]
-                  : styles.link
-              )}
-              to={'/feed'}
-            >
-              <ListIcon
-                type={currentLocation === '/feed' ? 'primary' : 'secondary'}
-              />
-              <p className='text text_type_main-default ml-2'>Лента заказов</p>
-            </Link>
-          </>
-        </div>
-        <div className={styles.logo}>
-          <Logo className='' />
-        </div>
-        <div className={styles.link_position_last}>
-          <Link
-            className={clsx(
-              styles.link,
-              currentLocation === '/profile'
-                ? [styles.link_active, styles.link]
-                : styles.link
-            )}
-            to={'/profile'}
-          >
-            <ProfileIcon
-              type={currentLocation === '/profile' ? 'primary' : 'secondary'}
-            />
-            <p className='text text_type_main-default ml-2'>
-              {userName || 'Личный кабинет'}
-            </p>
-          </Link>
-        </div>
-      </nav>
-    </header>
-  );
-};
+              </span>
+            </div>
+          )}
+        </NavLink>
+        <NavLink to='/feed' className={clsx(styles.navlink, 'p-4')}>
+          {({ isActive }) => (
+            <div className={clsx(styles.link, isActive && styles.link_active)}>
+              <ListIcon type={isActive ? 'primary' : 'secondary'} />
+              <span className='text text_type_main-default ml-2'>
+                Лента заказов
+              </span>
+            </div>
+          )}
+        </NavLink>
+      </div>
+      <div className={styles.logo}>
+        <Logo className='' />
+      </div>
+      <div className={styles.link_position_last}>
+        <NavLink to='/profile' className={clsx(styles.navlink, 'p-4')}>
+          {({ isActive }) => (
+            <div className={clsx(styles.link, isActive && styles.link_active)}>
+              <ProfileIcon type={isActive ? 'primary' : 'secondary'} />
+              <span className='text text_type_main-default ml-2'>
+                {userName || 'Личный кабинет'}
+              </span>
+            </div>
+          )}
+        </NavLink>
+      </div>
+    </nav>
+  </header>
+);
